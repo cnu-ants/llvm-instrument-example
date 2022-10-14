@@ -41,8 +41,6 @@ LDFLAGS += `$(LLVM_DIR)/build/bin/llvm-config --system-libs`
 
 all: instrument
 
-llvm_clang_lib.a: $(SOURCE_DIR)
-
 instrument: $(OBJS)
 	clang++ -g -Wall -o $@ $^ $(LDFLAGS)
 
