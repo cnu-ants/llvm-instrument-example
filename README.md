@@ -1,4 +1,4 @@
-# llvm-instrument-example
+# llvm-instrument-example (source-level)
 
 ## Before getting start
 Set your llvm-project path in the ``Makefile``
