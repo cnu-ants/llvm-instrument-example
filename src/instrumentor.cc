@@ -1,11 +1,13 @@
 #include "instrumentor.h"
+#include "clang/Lex/PreprocessorOptions.h"
 
 namespace instrumentor {
 
-static const std::array<std::string, 3> paths = {
+static const std::array<std::string, 4> paths = {
   "/usr/include",
   "/usr/include/x86_64-linux-gnu",
   "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+  "/usr/lib/jvm/java-1.11.0-openjdk-amd64/include/linux",
 };
 
 void Instrumentor::Instrument(const char* file_path) {
@@ -13,6 +15,9 @@ void Instrumentor::Instrument(const char* file_path) {
   // managing the various objects needed to run the compiler.
   clang::CompilerInstance comp_inst;
   
+  // Set C++ as the target
+  comp_inst.getLangOpts().CPlusPlus = 1;
+
   // Diagnostics manage problems and issues in compile 
   comp_inst.createDiagnostics(NULL, false);
 
@@ -40,6 +45,7 @@ void Instrumentor::Instrument(const char* file_path) {
 
   // Add HeaderSearch Path
   clang::Preprocessor &pp = comp_inst.getPreprocessor();
+
   const llvm::Triple &HeaderSearchTriple = pp.getTargetInfo().getTriple();
   
   clang::HeaderSearchOptions &hso = comp_inst.getHeaderSearchOpts();
@@ -110,9 +116,13 @@ std::string Instrumentor::GetOutputName(llvm::StringRef fname) {
     return std::string(fname.drop_back(4/*.cpp*/)) + "_instrumented.cpp";
   else if (fname.endswith(".cc"))
     return std::string(fname.drop_back(3/*.cc*/)) + "_instrumented.cc";
+  else if (fname.endswith(".h"))
+    return std::string(fname.drop_back(3/*.cc*/)) + "_instrumented.h";
+  else if (fname.endswith(".hpp"))
+    return std::string(fname.drop_back(3/*.cc*/)) + "_instrumented.hpp";
   else 
     throw InvalidFileException(std::string(fname) + 
-        ": file extension must be one of .c, .cc, or .cpp");
+        ": file extension must be one of .c, .cc, .cpp, .h, or .hpp");
 }
 
 }  // namespace instrumentor

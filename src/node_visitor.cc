@@ -1,8 +1,5 @@
 #include "node_visitor.h"
 
-using namespace clang;
-using namespace std;
-
 namespace instrumentor {
 
 NodeVisitor::NodeVisitor(Rewriter &R, const LangOptions &langOptions) :
@@ -13,12 +10,10 @@ bool NodeVisitor::VisitDecl(Decl *d) {
 }
 
 bool NodeVisitor::VisitStmt(Stmt *s) {
-  if (isa<DeclStmt>(s)) {
-    DeclStmt* decl_stmt = cast<DeclStmt>(s);
+  if (auto* decl_stmt = llvm::dyn_cast<DeclStmt>(s)) {
     assert(decl_stmt->isSingleDecl()); // temporary - for multiple decls : TBD
     Decl* decl = decl_stmt->getSingleDecl();
-    if (isa<VarDecl>(decl)){ 
-      VarDecl* var_decl = cast<VarDecl>(decl);
+    if (auto* var_decl = llvm::dyn_cast<VarDecl>(decl)){ 
       string var_name = var_decl->getNameAsString();
       string var_type = var_decl->getType().getAsString();
       if (var_type == "int" && var_decl->hasInit()) { // int <var> = <expr>;
