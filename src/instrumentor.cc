@@ -98,7 +98,7 @@ void Instrumentor::Instrument(const char* file_path) {
 
   // Parse the file to AST, registering our consumer as the AST consumer.
   std::cout << "Instrumenting..." << std::endl;
-  clang::ParseAST(pp, &consumer, comp_inst.getASTContext());
+  clang::ParseAST(pp, &consumer, comp_inst.getASTContext(), clang::TU_Module);
 
   // .c -> .c ; .cpp -> .cpp
   llvm::StringRef ifname = fin->getName();
