@@ -11,7 +11,7 @@ static const std::array<std::string, 4> paths = {
   "/usr/lib/jvm/java-1.11.0-openjdk-amd64/include/linux",
 };
 #elif __APPLE__
-static const std::array<std::string, 4> paths = {
+static const std::array<std::string, 1> paths = {
   "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
 };
 #endif
