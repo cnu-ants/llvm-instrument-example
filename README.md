@@ -1,6 +1,14 @@
 # llvm-instrument-example (source-level)
 
 ## Before getting start
+Install the llvm-project on your system, following the [installation
+instruction](https://github.com/llvm/llvm-project). The installation option
+needs to include the following:
+```
+-DLLVM_ENABLE_PROJECTS="clang" 
+-DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi" 
+```
+
 Set your llvm-project path in the ``Makefile``.
 ```
 LLVM_DIR = [put the absolute path of your llvm-project here]
