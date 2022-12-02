@@ -3,12 +3,18 @@
 
 namespace instrumentor {
 
+#if __linux__
 static const std::array<std::string, 4> paths = {
   "/usr/include",
   "/usr/include/x86_64-linux-gnu",
   "/usr/lib/gcc/x86_64-linux-gnu/9/include",
   "/usr/lib/jvm/java-1.11.0-openjdk-amd64/include/linux",
 };
+#elif __APPLE__
+static const std::array<std::string, 4> paths = {
+  "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
+};
+#endif
 
 void Instrumentor::Instrument(const char* file_path) {
   // CompilerInstance will hold the instance of the Clang compiler for us,
